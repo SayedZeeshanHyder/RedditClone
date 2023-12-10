@@ -1,0 +1,1 @@
+const appIcon = "assets/images/appIcon.jpg";

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "891784956799",
+    "project_id": "coffeeshop-c35ab",
+    "storage_bucket": "coffeeshop-c35ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891784956799:android:ce22cb21cb5055bef7e84a",
+        "android_client_info": {
+          "package_name": "com.example.reddit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSPGjx6PRwduPyegGmOGP4PTxL2FLlCw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
