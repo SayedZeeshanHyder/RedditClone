@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
-class EmailController extends GetxController
+class ButtonController extends GetxController
 {
-  RxString incorrectEmail = "".obs;
-  RxString incorrectPassword = "".obs;
+  RxBool buttonEnabled = false.obs;
 }

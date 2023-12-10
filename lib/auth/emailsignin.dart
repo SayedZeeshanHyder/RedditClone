@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reddit/auth/authservices.dart';
 import 'package:reddit/colors.dart';
 import 'package:reddit/controller/emailController.dart';
 
@@ -11,7 +12,7 @@ class EmailSignIn extends StatelessWidget
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  final emailAuthController = Get.put(EmailController());
+  final buttonController = Get.put(ButtonController());
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,9 @@ class EmailSignIn extends StatelessWidget
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+
+      resizeToAvoidBottomInset: true,
+
       appBar: AppBar(
         title: CircleAvatar(
           radius: size.width*0.05,
@@ -57,6 +61,18 @@ class EmailSignIn extends StatelessWidget
             ),
 
             child: TextField(
+
+              onChanged: (val){
+                if(passwordController.text.isNotEmpty && val.isNotEmpty)
+                  {
+                    buttonController.buttonEnabled.value=true;
+                  }
+                else
+                  {
+                    if(buttonController.buttonEnabled.value) {buttonController.buttonEnabled.value=false;}
+                  }
+              },
+
               controller: emailController,
               decoration: InputDecoration(
 
@@ -68,8 +84,6 @@ class EmailSignIn extends StatelessWidget
               ),
             ),
           ),
-
-          emailAuthController.incorrectEmail.value.isNotEmpty?Obx(()=> Text(emailAuthController.incorrectEmail.value,style: TextStyle(color: appColor),)):SizedBox(),
 
           SizedBox(
             height: size.height*0.02,
@@ -90,6 +104,18 @@ class EmailSignIn extends StatelessWidget
             ),
 
             child: TextField(
+
+              onChanged: (val){
+                if(emailController.text.isNotEmpty && val.isNotEmpty)
+                {
+                  buttonController.buttonEnabled.value=true;
+                }
+                else
+                {
+                  if(buttonController.buttonEnabled.value) {buttonController.buttonEnabled.value=false;}
+                }
+              },
+
               controller: passwordController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -101,9 +127,7 @@ class EmailSignIn extends StatelessWidget
             ),
           ),
 
-          emailAuthController.incorrectPassword.value.isNotEmpty?Obx(()=> Text(emailAuthController.incorrectPassword.value,style: TextStyle(color: appColor),textAlign: TextAlign.start,),):SizedBox(width:0,height: 0,),
-
-          const Spacer(flex: 11,),
+          const Spacer(flex: 6,),
 
           Text("By continuing you agree to our User Agreement and \n acknowledge that you understand the Privacy Policy .",textAlign: TextAlign.center,maxLines: 2,style: TextStyle(color: Colors.grey.shade400,fontSize: 12.5),),
 
@@ -118,43 +142,15 @@ class EmailSignIn extends StatelessWidget
       floatingActionButton: SizedBox(
         width: size.width*0.97,
         height: size.height*0.06,
-        child: ElevatedButton(
-          onPressed: (){
+        child: Obx(
+          ()=> ElevatedButton(
+            onPressed: buttonController.buttonEnabled.value?(){
 
-            if(emailController.text.isEmpty)
-              {
-                emailAuthController.incorrectEmail.value="Enter Email";
-              }
-            else if(!emailController.text.contains("@"))
-              {
-                emailAuthController.incorrectEmail.value="Invalid Format";
-              }
-            else
-              {
-                emailAuthController.incorrectEmail.value="";
-              }
+                  AuthServices.emailLogin(context, emailController.text.toString(), passwordController.text.toString());
 
-            if(passwordController.text.isEmpty)
-            {
-              print("this called");
-              emailAuthController.incorrectPassword.value="Enter Password";
-            }
-            else if(passwordController.text.length<6)
-            {
-              emailAuthController.incorrectPassword.value="Password must contain atleast 6 letters";
-            }
-            else
-            {
-              emailAuthController.incorrectPassword.value="";
-            }
-
-            if(emailAuthController.incorrectEmail.value=="" && emailAuthController.incorrectPassword.value=="")
-              {
-                //Firebase Email Auth
-              }
-
-          },
-          child: const Text("Continue"),
+            }:null,
+            child: const Text("Continue"),
+          ),
         ),
       ),
     );
