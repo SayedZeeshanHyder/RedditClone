@@ -15,7 +15,6 @@ final lightTheme = ThemeData(
   ),
 
   appBarTheme: AppBarTheme(
-    backgroundColor: appColor,
     centerTitle: true
   )
 

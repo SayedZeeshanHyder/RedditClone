@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reddit/auth/emailsignin.dart';
 import 'package:reddit/colors.dart';
 import 'package:reddit/images.dart';
 
@@ -23,7 +24,7 @@ class AuthScreen extends StatelessWidget
               ),
 
               SizedBox(height: size.height*0.05,),
-              Text("All your interests in one place",style: TextStyle(fontSize: 38,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+              const Text("All your interests in one place",style: TextStyle(fontSize: 38,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
 
               SizedBox(
                 height: size.height*0.125,
@@ -36,7 +37,7 @@ class AuthScreen extends StatelessWidget
                     color: greyButton,
                   borderRadius: BorderRadius.circular(size.width*0.05),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Spacer(flex: 1,),
@@ -59,7 +60,7 @@ class AuthScreen extends StatelessWidget
                   color: greyButton,
                   borderRadius: BorderRadius.circular(size.width*0.05),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Spacer(flex: 1,),
@@ -76,21 +77,28 @@ class AuthScreen extends StatelessWidget
               ),
 
               //Email Button
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 0,vertical: size.width*0.03),
-                decoration: BoxDecoration(
-                  color: greyButton,
-                  borderRadius: BorderRadius.circular(size.width*0.05),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Spacer(flex: 1,),
-                    Icon(Icons.email),
-                    Spacer(flex: 4,),
-                    Text("Continue with email",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
-                    Spacer(flex: 4,),
-                  ],
+              InkWell(
+                onTap: (){
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EmailSignIn()));
+
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 0,vertical: size.width*0.03),
+                  decoration: BoxDecoration(
+                    color: greyButton,
+                    borderRadius: BorderRadius.circular(size.width*0.05),
+                  ),
+                  child:const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Spacer(flex: 1,),
+                      Icon(Icons.email),
+                      Spacer(flex: 4,),
+                      Text("Continue with email",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                      Spacer(flex: 4,),
+                    ],
+                  ),
                 ),
               ),
 
@@ -107,7 +115,7 @@ class AuthScreen extends StatelessWidget
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Already a Redditor?",textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold),),
+                        const Text("Already a Redditor?",textAlign: TextAlign.center,style: TextStyle(color: Colors.black,fontSize: 14,fontWeight: FontWeight.bold),),
                         SizedBox(width: size.width*0.01,),
                         Text("Log in",style: TextStyle(color: appColor,fontSize: 14,fontWeight: FontWeight.bold),),
                       ],
