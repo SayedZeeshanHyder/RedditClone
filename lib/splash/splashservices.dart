@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:reddit/auth/authScreen.dart';
-import 'package:reddit/screens/home.dart';
+import 'package:reddit/screens/nav.dart';
 
 class SplashServices
 {

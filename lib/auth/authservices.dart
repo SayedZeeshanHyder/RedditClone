@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reddit/colors.dart';
 
-import '../screens/home.dart';
+import '../screens/nav.dart';
 import 'authScreen.dart';
 
 class AuthServices
