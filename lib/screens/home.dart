@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:reddit/auth/authservices.dart';
+import 'package:get/get.dart';
+import 'package:reddit/controller/bottomNavController.dart';
 
 import '../colors.dart';
 
@@ -10,6 +10,8 @@ class Home extends StatelessWidget
 {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final bottomNavController = Get.put(BottomNavController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class Home extends StatelessWidget
               onTap: (){
                 scaffoldKey.currentState?.openDrawer();
               },
-              child: Icon(Icons.menu,size: size.width*0.1,),
+              child: Icon(Icons.menu,size: size.width*0.08,),
             ),
             SizedBox(width: size.width*0.02,),
             Container(
@@ -75,27 +77,58 @@ class Home extends StatelessWidget
       ),
 
       drawer: Drawer(
+        child: Column(
+          children: [
+            SizedBox(height: size.height*0.05,),
+
+            const Divider(),
+
+            ListTile(
+              title: const Text("Happening Now",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14),),
+              trailing: Icon(CupertinoIcons.right_chevron),
+            ),
+
+            const Divider(),
+
+            ListTile(
+              title: const Text("Your Communities",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14),),
+              trailing: Icon(CupertinoIcons.right_chevron),
+            ),
+
+            const Divider(),
+
+            ListTile(
+              title: const Text("All"),
+              leading: Icon(CupertinoIcons.graph_circle),
+            ),
+          ],
+        ),
       ),
 
       endDrawer: Drawer(
-
       ),
 
 
-      bottomNavigationBar: BottomNavigationBar(
-        showUnselectedLabels: true,
-        unselectedItemColor: Colors.grey.shade500,
-        unselectedLabelStyle: TextStyle(color: Colors.grey.shade500,fontWeight: FontWeight.w400),
-        selectedItemColor: Colors.black,
-        selectedLabelStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+      bottomNavigationBar: Obx(
+        ()=> BottomNavigationBar(
+          onTap: (index){
+            bottomNavController.currentIndex.value=index;
+          },
+          currentIndex: bottomNavController.currentIndex.value,
+          showUnselectedLabels: true,
+          unselectedItemColor: Colors.grey.shade500,
+          unselectedLabelStyle: TextStyle(color: Colors.grey.shade500,fontWeight: FontWeight.w400),
+          selectedItemColor: Colors.black,
+          selectedLabelStyle: const TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
 
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.people_outlined),label: "Communities"),
-          BottomNavigationBarItem(icon: Icon(Icons.add),label: "Create"),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.chat_bubble_fill),label: "Chat"),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.bell),label: "Inbox"),
-        ],
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.people_outlined),label: "Communities"),
+            BottomNavigationBarItem(icon: Icon(Icons.add),label: "Create"),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.chat_bubble_fill),label: "Chat"),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.bell),label: "Inbox"),
+          ],
+        ),
       ),
 
 
@@ -109,25 +142,28 @@ class Home extends StatelessWidget
                 child: CircularProgressIndicator(color: appColor,),
               );
             }
-          return ListView.builder(itemCount: snapshots.data?.docs.length,itemBuilder: (context,index){
 
-            final doc = snapshots.data?.docs[index];
+          final doc = snapshots.data?.docs[0];
+
+          return ListView.builder(itemCount: snapshots.data?.docs[0]["posts"].length,itemBuilder: (context,index){
 
             final post = doc?["posts"][index];
 
             return Column(
+
               children: [
-                const Divider(),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: size.width*0.03,vertical: size.height*0.01),
                   child: Column(
+
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
                       Row(
                         children: [
-                          CircleAvatar(backgroundColor: Colors.grey.shade400,radius: size.width*0.05,),
+                          CircleAvatar(backgroundColor: Colors.grey.shade400,radius: size.width*0.03,),
                           SizedBox(width: size.width*0.02,),
-                          Text(post["influencer"],style: TextStyle(fontWeight: FontWeight.bold,fontSize: size.width*0.04),),
+                          Text(post["influencer"],style: TextStyle(fontWeight: FontWeight.bold,fontSize: size.width*0.035),),
                           SizedBox(width: size.width*0.015,),
                           Text("${post["time"]}d",style: TextStyle(color: Colors.grey.shade400),),
 
@@ -138,17 +174,18 @@ class Home extends StatelessWidget
 
                       SizedBox(height: size.height*0.01,),
 
-                      Text(post["title"],style: TextStyle(fontWeight: FontWeight.w600),),
+                      Text(post["title"],style: TextStyle(fontWeight: FontWeight.w600),textAlign: TextAlign.start,),
 
                       SizedBox(height: size.height*0.01,),
 
-                      post["images"]!=null? Container(
+                      post["image"]!=""? Container(
                         color: Colors.green.shade200,
                         height: size.height*0.25,
+                        child: Image.network(post["image"]),
                       ) :
                       Text(post["subtitle"],style: TextStyle(fontWeight: FontWeight.w300),maxLines: 3,overflow: TextOverflow.ellipsis,),
 
-                      SizedBox(height: size.height*0.01,),
+                      SizedBox(height: size.height*0.02,),
 
                       Row(
                         children: [
@@ -167,13 +204,17 @@ class Home extends StatelessWidget
 
                           Text(post["comments"].length.toString()),
 
-                          SizedBox(width: size.width*0.13,),
+                          SizedBox(width: size.width*0.10,),
 
                           const Icon(CupertinoIcons.arrow_turn_up_right),
 
                           SizedBox(width: size.width*0.02,),
 
-                          const Text("Share")
+                          const Text("Share"),
+
+                          SizedBox(width: size.width*0.02,),
+
+                          Text(post["forwards"].toString()),
 
                         ],
                       ),
