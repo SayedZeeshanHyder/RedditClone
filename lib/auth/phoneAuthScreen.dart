@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:reddit/auth/authservices.dart';
 import 'package:reddit/colors.dart';
 
 import '../images.dart';
@@ -37,41 +38,62 @@ class PhoneAuthScreen extends StatelessWidget
 
           Row(
             children: [
-              Spacer(),
+
+              SizedBox(width: size.width*0.02,),
 
               Container(
+                width: size.width*0.3,
                 decoration: BoxDecoration(
                   color: greyButton,
                   borderRadius: BorderRadius.circular(size.width*0.05),
                 ),
                 padding: EdgeInsets.all(size.width*0.01),
                 child: CountryCodePicker(
-                  initialSelection: "In",
+                  initialSelection: "+91",
                   onChanged: (val)
                   {
-                    countryCode=val.toString();
+                    countryCode=val.dialCode.toString();
                   },
                 ),
               ),
 
-              Spacer(),
+              SizedBox(width: size.width*0.02,),
 
-              Container(
-                color: greyButton,
-                child: Column(
-                  children: [
-                    Text("Phone number",style: TextStyle(color: Colors.grey.shade500,fontSize: 12),),
-                    TextField(
-                      controller: phoneNumberController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        )
+              Expanded(
+                child: Container(
+
+                  decoration: BoxDecoration(
+                    color: greyButton,
+                    borderRadius: BorderRadius.circular(size.width*0.05),
+                  ),
+
+                  padding: EdgeInsets.symmetric(vertical: size.height*0.015,horizontal: size.width*0.05),
+
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Phone number",style: TextStyle(color: Colors.grey.shade500,fontSize: 12),),
+
+
+                      SizedBox(
+                        height: size.height*0.03,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          controller: phoneNumberController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            )
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
+
+              SizedBox(width: size.width*0.02,),
             ],
           ),
 
@@ -91,6 +113,14 @@ class PhoneAuthScreen extends StatelessWidget
         height: size.height*0.06,
         child: ElevatedButton(
             onPressed: (){
+
+              print(countryCode);
+
+              if(phoneNumberController.text.length==10)
+                {
+                  String completeNumber = "$countryCode${phoneNumberController.text}";
+                  AuthServices.sendSms(completeNumber.toString(),context);
+                }
 
             },
             child: const Text("Continue"),

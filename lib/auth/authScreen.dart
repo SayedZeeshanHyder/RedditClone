@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reddit/auth/authservices.dart';
 import 'package:reddit/auth/emailsignin.dart';
+import 'package:reddit/auth/phoneAuthScreen.dart';
 import 'package:reddit/colors.dart';
 import 'package:reddit/images.dart';
 
@@ -32,21 +33,26 @@ class AuthScreen extends StatelessWidget
               ),
 
               //Phone Number Button
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 0,vertical: size.width*0.03),
-                decoration: BoxDecoration(
-                    color: greyButton,
-                  borderRadius: BorderRadius.circular(size.width*0.05),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Spacer(flex: 1,),
-                    Icon(Icons.phone_android),
-                    Spacer(flex: 4,),
-                    Text("Continue with phone number",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
-                    Spacer(flex: 4,),
-                  ],
+              InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>PhoneAuthScreen()));
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 0,vertical: size.width*0.03),
+                  decoration: BoxDecoration(
+                      color: greyButton,
+                    borderRadius: BorderRadius.circular(size.width*0.05),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Spacer(flex: 1,),
+                      Icon(Icons.phone_android),
+                      Spacer(flex: 4,),
+                      Text("Continue with phone number",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                      Spacer(flex: 4,),
+                    ],
+                  ),
                 ),
               ),
 

@@ -63,24 +63,47 @@ class AuthServices
   }
 
 
-  static sendSms(String phonenumber)
+  static sendSms(String phonenumber,context)
   {
+
     FirebaseAuth.instance.verifyPhoneNumber(
 
         phoneNumber: phonenumber,
 
         verificationCompleted: (val){
 
+          //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
+          print("Verification Completed");
+
         },
         verificationFailed: (val){
 
+          print("Failed due to :$val");
+
         },
         codeSent: (verificationId,resendToken){
-          print(verificationId);
+
+          String smsCode = "123456";
+
+          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+
+          FirebaseAuth.instance.signInWithCredential(credential).then((value){
+
+            Navigator.pop(context);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
+
+
+          }).onError((error, stackTrace){
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: appColor,content: Text(error.toString()),),);
+          });
+
         },
         codeAutoRetrievalTimeout: (val) {
 
-        });
+        },
+      timeout: const Duration(minutes: 1),
+
+    );
   }
 
 }
