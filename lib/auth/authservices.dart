@@ -62,4 +62,25 @@ class AuthServices
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthScreen()));
   }
 
+
+  static sendSms(String phonenumber)
+  {
+    FirebaseAuth.instance.verifyPhoneNumber(
+
+        phoneNumber: phonenumber,
+
+        verificationCompleted: (val){
+
+        },
+        verificationFailed: (val){
+
+        },
+        codeSent: (verificationId,resendToken){
+          print(verificationId);
+        },
+        codeAutoRetrievalTimeout: (val) {
+
+        });
+  }
+
 }
