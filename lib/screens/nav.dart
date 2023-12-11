@@ -3,17 +3,37 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reddit/controller/bottomNavController.dart';
+import 'package:reddit/screens/createscreen.dart';
+import 'package:reddit/screens/home.dart';
 
 import '../colors.dart';
 
-class Home extends StatelessWidget
+class Nav extends StatelessWidget
 {
+
+  List<Widget> pages=[
+    //Home
+    Home(),
+
+    //Communities
+    Center(child: Text("Communitites"),),
+
+    //Create
+    Create(),
+
+    //Chat
+    SizedBox(),
+
+    //Inbox
+    SizedBox(),
+
+  ];
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final bottomNavController = Get.put(BottomNavController());
 
-  final _pageController = PageController();
+  final pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +42,7 @@ class Home extends StatelessWidget
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: AppBar(
+      appBar: bottomNavController.currentIndex.value!=2?AppBar(
         actions: [
           Container(),
         ],
@@ -76,6 +96,12 @@ class Home extends StatelessWidget
         ),
         centerTitle: false,
 
+      ):AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(icon : Icon(Icons.close),onPressed: (){bottomNavController.currentIndex.value=0;},),
+        actions: [
+          ElevatedButton(onPressed: (){}, child: const Text("Post"),),
+        ],
       ),
 
       drawer: Drawer(
@@ -112,10 +138,10 @@ class Home extends StatelessWidget
 
 
       bottomNavigationBar: Obx(
-        ()=> BottomNavigationBar(
+        ()=> bottomNavController.currentIndex.value!=2?BottomNavigationBar(
           onTap: (index){
             bottomNavController.currentIndex.value=index;
-            _pageController.jumpTo(index.toDouble());
+            pageController.jumpTo(index.toDouble());
           },
           currentIndex: bottomNavController.currentIndex.value,
           showUnselectedLabels: true,
@@ -131,30 +157,11 @@ class Home extends StatelessWidget
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.chat_bubble_fill),label: "Chat"),
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.bell),label: "Inbox"),
           ],
-        ),
+        ): const SizedBox(),
       ),
 
 
-      body: PageView(
-        controller: _pageController,
-        children: [
-          //Home
-          Home(),
-
-          //Communities
-          SizedBox(),
-
-          //Create
-          SizedBox(),
-
-          //Chat
-          SizedBox(),
-
-          //Inbox
-          SizedBox(),
-
-        ],
-      )
+      body: Obx(()=>pages[bottomNavController.currentIndex.value]),
 
     );
   }

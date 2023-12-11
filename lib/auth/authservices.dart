@@ -18,7 +18,7 @@ class AuthServices
 
       print("kuch hua");
       Navigator.pop(context);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
     }).onError((error, stackTrace){
 
       print(error.toString());
@@ -50,7 +50,7 @@ class AuthServices
     );
 
     FirebaseAuth.instance.signInWithCredential(credential).then((value){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
     });
 
   }
@@ -90,7 +90,7 @@ class AuthServices
           FirebaseAuth.instance.signInWithCredential(credential).then((value){
 
             Navigator.pop(context);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
 
 
           }).onError((error, stackTrace){
