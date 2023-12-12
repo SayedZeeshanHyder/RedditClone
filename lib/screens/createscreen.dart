@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reddit/services/imageServices.dart';
 import 'package:reddit/services/postController.dart';
 
 class Create extends StatelessWidget
@@ -50,7 +51,11 @@ class Create extends StatelessWidget
         Row(
           children: [
             IconButton(icon: const Icon(Icons.attach_file),onPressed: (){},),
-            IconButton(icon: const Icon(Icons.photo),onPressed: (){},),
+            IconButton(icon: const Icon(Icons.photo),onPressed: () async{
+
+              postController.img.value = await ImageService.uploadImage();
+
+            },),
             IconButton(icon: const Icon(Icons.video_collection),onPressed: (){},),
           ],
         ),

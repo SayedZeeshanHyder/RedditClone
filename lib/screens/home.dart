@@ -103,9 +103,9 @@ class _HomeState extends State<Home> {
                       SizedBox(height: size.height * 0.01,),
 
                       post["image"] != "" ? Container(
-                        color: Colors.green.shade200,
                         height: size.height * 0.25,
-                        child: Image.network(post["image"]),
+                        width: size.width,
+                        child: Image.network(post["image"],fit: BoxFit.cover,),
                       ) :
                       Text(post["subtitle"], style: TextStyle(
                           fontWeight: FontWeight.w300),
