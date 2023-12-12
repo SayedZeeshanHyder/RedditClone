@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reddit/auth/authservices.dart';
 import 'package:reddit/controller/bottomNavController.dart';
 import 'package:reddit/screens/createscreen.dart';
 import 'package:reddit/screens/home.dart';
@@ -149,6 +150,14 @@ class Nav extends StatelessWidget
         ),
 
         endDrawer: Drawer(
+          child: Center(
+            child: ElevatedButton(
+              onPressed: (){
+                AuthServices.signOut(context);
+              },
+              child: Text("LogOut"),
+            ),
+          ),
         ),
 
 

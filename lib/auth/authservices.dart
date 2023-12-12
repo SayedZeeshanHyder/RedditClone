@@ -1,9 +1,11 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reddit/auth/authname.dart';
 import 'package:reddit/colors.dart';
+import 'package:reddit/screens/avatarScreen.dart';
 
 import '../screens/nav.dart';
 import 'authScreen.dart';
@@ -33,6 +35,7 @@ class AuthServices
         ),
       );
     });
+
   }
 
 
@@ -108,9 +111,23 @@ class AuthServices
   }
 
 
-  static setUsername(String username,context)
-  {
+  static setUsername(List listOfUsers,context,username)
+  async{
+
+    final get = await FirebaseFirestore.instance.collection("Users").doc("uniqueIds").set(
+        {
+          "users": listOfUsers,
+        }
+    );
+
+
     FirebaseAuth.instance.currentUser?.updateDisplayName(username);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AvatarScreen()));
+  }
+
+  static updateAvatar(String avatar,context)
+  async{
+    await FirebaseAuth.instance.currentUser?.updatePhotoURL(avatar);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
   }
 

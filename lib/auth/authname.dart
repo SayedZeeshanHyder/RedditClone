@@ -32,8 +32,8 @@ class _AuthNameState extends State<AuthName> {
   }
 
   getAllUsers()async{
-    final get = await FirebaseFirestore.instance.collection("Users").doc("Users").get();
-    listOfUsers = get.exists ? get.data()!['Users'] : [];
+    final get = await FirebaseFirestore.instance.collection("Users").doc("uniqueIds").get();
+    listOfUsers = get.exists ? get.data()!['users'] : [];
   }
 
   @override
@@ -141,7 +141,15 @@ class _AuthNameState extends State<AuthName> {
           () => ElevatedButton(
             onPressed: buttonController.buttonEnabled.value ? () {
 
-              AuthServices.setUsername(usernameController.text, context);
+              if(!listOfUsers.contains(usernameController.text)) {
+
+                listOfUsers.add(usernameController.text);
+                AuthServices.setUsername(listOfUsers, context,usernameController.text);
+
+              }
+              else{
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: appColor,content: const Text("Sorry , username is Already Taken."),),);
+              }
 
             } : null,
             child: const Text("Continue"),
