@@ -151,15 +151,148 @@ class Nav extends StatelessWidget
         ),
 
         endDrawer: Drawer(
-          child: Center(
-            child: ElevatedButton(
-              onPressed: (){
-                AuthServices.signOut(context);
-              },
-              child: Text("LogOut"),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+
+                SizedBox(
+                  height: size.height*0.35,
+                  child: Image.asset(FirebaseAuth.instance.currentUser!.photoURL.toString(),fit: BoxFit.cover,),
+                ),
+
+                SizedBox(height: size.height*0.02,),
+
+                Text(FirebaseAuth.instance.currentUser!.displayName.toString(),style: TextStyle(fontSize: size.width*0.06),),
+                SizedBox(height: size.height*0.01,),
+                Chip(
+                  shape: const StadiumBorder(),
+                  side: BorderSide(
+                    width: size.width*0.005,
+                    color: Colors.green.shade300,
+                  ),
+                  label: SizedBox(
+                    width: size.width*0.5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(Icons.circle,color: Colors.green.shade300,),
+                        const Text("Status Online"),
+                      ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: size.height*0.03,),
+
+                SizedBox(
+                  height: size.height*0.075,
+                  child: Row(
+                    children: [
+                      SizedBox(width: size.width*0.03,),
+                      Icon(Icons.severe_cold,color: Colors.blue,),
+                      SizedBox(width: size.width*0.03,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("1",style: TextStyle(fontSize: size.width*0.065),),
+                          Text("Karma",style: TextStyle(color: Colors.grey,fontSize: size.width*0.04),),
+                        ],
+                      ),
+                      const Spacer(flex: 1,),
+                      const VerticalDivider(),
+                      SizedBox(width: size.width*0.03,),
+                      Icon(Icons.cake,color: Colors.blue,),
+                      SizedBox(width: size.width*0.03,),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("1d"),
+                          Text("Karma"),
+                        ],
+                      ),
+                      const Spacer(flex: 1,),
+                    ],
+                  ),
+                ),
+
+                const Divider(),
+
+                 // Other Accessibilities
+                SizedBox(
+                   height: size.height*0.3,
+                   child: const SingleChildScrollView(
+                     child: Column(
+                       children: [
+                         ListTile(
+                           leading: Icon(Icons.emoji_food_beverage),
+                           title: Text("Reddit Recap"),
+                         ),
+
+                         ListTile(
+                           leading: Icon(Icons.person),
+                           title: Text("My Profile"),
+                         ),
+
+                         ListTile(
+                           leading: Icon(Icons.people_outline),
+                           title: Text("Create a community"),
+                         ),
+
+                         ListTile(
+                           leading: Icon(Icons.folder),
+                           title: Text("Contributor Program"),
+                         ),
+
+                         ListTile(
+                           leading: Icon(Icons.stream_sharp),
+                           title: Text("Vault"),
+                         ),
+
+                         ListTile(
+                           leading: Icon(Icons.emoji_food_beverage),
+                           title: Text("Reddit Recap"),
+                         ),
+
+                         ListTile(
+                           leading: Icon(Icons.emoji_food_beverage),
+                           title: Text("Reddit Recap"),
+                         ),
+
+                         ListTile(
+                           leading: Icon(Icons.emoji_food_beverage),
+                           title: Text("Reddit Recap"),
+                         ),
+                       ],
+                     ),
+                   ),
+                 ),
+
+                const ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text("Settings"),
+                ),
+
+                //Log Out Button
+                SizedBox(
+                  height: size.height*0.04,
+                  width: size.width*0.6,
+                  child: ElevatedButton(
+                    onPressed: (){
+                      AuthServices.signOut(context);
+                    },
+                    child: const Text("LogOut"),
+                  ),
+                ),
+
+                SizedBox(
+                  height: size.height*0.02,
+                ),
+              ],
             ),
           ),
         ),
+
 
 
         bottomNavigationBar: Obx(
