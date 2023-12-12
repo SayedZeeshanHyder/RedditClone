@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:reddit/auth/authname.dart';
 import 'package:reddit/colors.dart';
 
 import '../screens/nav.dart';
@@ -18,14 +19,14 @@ class AuthServices
 
       print("kuch hua");
       Navigator.pop(context);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthName()));
     }).onError((error, stackTrace){
 
-      print(error.toString());
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          shape: StadiumBorder(),
+          shape: const StadiumBorder(),
           backgroundColor: appColor,
           content: Text(error.toString(),style: const TextStyle(color: Colors.white),
           ),
@@ -50,7 +51,7 @@ class AuthServices
     );
 
     FirebaseAuth.instance.signInWithCredential(credential).then((value){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthName()));
     });
 
   }
@@ -90,7 +91,7 @@ class AuthServices
           FirebaseAuth.instance.signInWithCredential(credential).then((value){
 
             Navigator.pop(context);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthName()));
 
 
           }).onError((error, stackTrace){
@@ -104,6 +105,13 @@ class AuthServices
       timeout: const Duration(minutes: 1),
 
     );
+  }
+
+
+  static setUsername(String username,context)
+  {
+    FirebaseAuth.instance.currentUser?.updateDisplayName(username);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
   }
 
 }

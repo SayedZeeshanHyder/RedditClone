@@ -1,12 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../colors.dart';
 
-class Home extends StatelessWidget
+class Home extends StatefulWidget
 {
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
 
@@ -23,11 +29,27 @@ class Home extends StatelessWidget
           );
         }
 
+        if(!snapshots.hasData){
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("No Posts Yet"),
+                ElevatedButton(onPressed: (){
+                  setState(() {});
+                }, child: const Text("Refresh"),),
+              ],
+            ),
+          );
+        }
+
         final doc = snapshots.data?.docs[0];
 
         return ListView.builder(itemCount: snapshots.data?.docs[0]["posts"].length,itemBuilder: (context,index){
 
           final post = doc?["posts"][index];
+
+          final time= Timestamp(post["time"].seconds,post["time"].nanoseconds).toDate();
 
           return Column(
 
@@ -45,16 +67,16 @@ class Home extends StatelessWidget
                         SizedBox(width: size.width*0.02,),
                         Text(post["influencer"],style: TextStyle(fontWeight: FontWeight.bold,fontSize: size.width*0.035),),
                         SizedBox(width: size.width*0.015,),
-                        Text("${post["time"]}d",style: TextStyle(color: Colors.grey.shade400),),
+                        Text((timeago.format(time)),style: TextStyle(color: Colors.grey.shade400),),
 
                         Spacer(),
-                        Icon(Icons.more_vert),
+                        const Icon(Icons.more_vert),
                       ],
                     ),
 
                     SizedBox(height: size.height*0.01,),
 
-                    Text(post["title"],style: TextStyle(fontWeight: FontWeight.w600),textAlign: TextAlign.start,),
+                    Text(post["title"],style: const TextStyle(fontWeight: FontWeight.w600),textAlign: TextAlign.start,),
 
                     SizedBox(height: size.height*0.01,),
 
@@ -108,5 +130,4 @@ class Home extends StatelessWidget
       },
     );
   }
-
 }
