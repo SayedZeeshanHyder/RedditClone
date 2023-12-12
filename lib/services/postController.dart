@@ -24,6 +24,29 @@ class PostController
       "time":DateTime.now(),
       "influencer":FirebaseAuth.instance.currentUser!.displayName,
       "title":title,
+      "influencerAvatar":FirebaseAuth.instance.currentUser!.photoURL,
+      "subtitle":body,
+      "image": image != "" ? image : "",
+      "comments":[],
+      "up":0,
+      "forwards":0
+    });
+
+    FirebaseFirestore.instance.collection("Posts").doc(currentUserUid.toString()).set({
+      "posts":myPosts,
+    }).onError((error, stackTrace){
+      print(error.toString());
+    });
+
+    final getAllPosts = await FirebaseFirestore.instance.collection("AllPosts").doc("AllPosts").get();
+
+    myPosts = getAllPosts.exists ? getAllPosts.data()!["posts"] : [];
+
+    myPosts.add({
+      "time":DateTime.now(),
+      "influencer":FirebaseAuth.instance.currentUser!.displayName,
+      "title":title,
+      "influencerAvatar":FirebaseAuth.instance.currentUser!.photoURL,
       "subtitle":body,
       "image": image != "" ? image : "",
       "comments":[],
@@ -32,13 +55,11 @@ class PostController
     });
 
 
-    FirebaseFirestore.instance.collection("Posts").doc(currentUserUid).set({
+    FirebaseFirestore.instance.collection("AllPosts").doc("AllPosts").set({
       "posts":myPosts,
     }).onError((error, stackTrace){
       print(error.toString());
     });
   }
-
-
 
 }

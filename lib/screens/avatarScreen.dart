@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reddit/auth/authservices.dart';
 import 'package:reddit/colors.dart';
 import 'package:reddit/controller/avatarController.dart';
 import 'package:reddit/controller/emailController.dart';
@@ -212,7 +213,7 @@ class AvatarScreen extends StatelessWidget
               () => ElevatedButton(
             onPressed: buttonController.buttonEnabled.value ? () {
 
-
+              AuthServices.updateAvatar(passAvatar(), context);
 
             } : null,
             child: const Text("Continue"),
@@ -223,6 +224,23 @@ class AvatarScreen extends StatelessWidget
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
     );
+  }
+
+  String passAvatar()
+  {
+    switch(avatarController.currentAvatar.value)
+    {
+      case 1:return captainAmericaAvatar;
+      case 2:return ironManAvatar;
+      case 3:return thorAvatar;
+      case 4:return hulkAvatar;
+      case 5:return hawkeyeAvatar;
+      case 6:return blackWidowAvatar;
+      case 7:return drStrangeAvatar;
+      case 8:return spidermanAvatar;
+      case 9:return antmanAvatar;
+    }
+    return "";
   }
 
 }

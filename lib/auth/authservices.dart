@@ -123,6 +123,7 @@ class AuthServices
 
     FirebaseAuth.instance.currentUser?.updateDisplayName(username);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AvatarScreen()));
+
   }
 
   static updateAvatar(String avatar,context)

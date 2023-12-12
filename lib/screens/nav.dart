@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -94,7 +95,7 @@ class Nav extends StatelessWidget
                 onTap: (){
                   scaffoldKey.currentState?.openEndDrawer();
                 },
-                child: Icon(Icons.circle,color: Colors.green,size: size.width*0.1,),
+                child: CircleAvatar(backgroundImage: AssetImage(FirebaseAuth.instance.currentUser!.photoURL.toString()),),
               ),
             ],
           ),

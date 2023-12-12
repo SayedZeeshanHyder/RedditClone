@@ -90,16 +90,12 @@ class _AuthNameState extends State<AuthName> {
                   height: size.height*0.03,
                   child: TextField(
                     onChanged: (val){
-                      for(String i in listOfUsers)
-                        {
-                          if(i==usernameController.text && usernameController.text.length>5)
-                            {
-                              buttonController.buttonEnabled.value=true;
-                            }
-                          else{
-                            buttonController.buttonEnabled.value=false;
-                          }
-                        }
+                      if(val.isNotEmpty){
+                        buttonController.buttonEnabled.value=true;
+                      }
+                      else{
+                        buttonController.buttonEnabled.value=false;
+                      }
                     },
                     keyboardType: TextInputType.text,
                     controller: usernameController,
@@ -126,6 +122,7 @@ class _AuthNameState extends State<AuthName> {
 
               return ListTile(
                 onTap: (){
+                  buttonController.buttonEnabled.value=true;
                   usernameController.text=random;
                 },
                 title: Text(random),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -19,7 +20,7 @@ class _HomeState extends State<Home> {
     Size size = MediaQuery.of(context).size;
 
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("Posts").snapshots(),
+      stream: FirebaseFirestore.instance.collection("AllPosts").snapshots(),
       builder: (context,snapshots){
 
         if(snapshots.connectionState==ConnectionState.waiting)
@@ -29,7 +30,7 @@ class _HomeState extends State<Home> {
           );
         }
 
-        if(!snapshots.hasData){
+        if(snapshots.data!.docs.isEmpty){
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -43,90 +44,115 @@ class _HomeState extends State<Home> {
           );
         }
 
-        final doc = snapshots.data?.docs[0];
+        //final doc = snapshots.data?.docs[2];
 
-        return ListView.builder(itemCount: snapshots.data?.docs[0]["posts"].length,itemBuilder: (context,index){
+          return ListView.builder(
+              itemCount: snapshots.data!.docs[0]["posts"].length, itemBuilder: (context, index) {
 
-          final post = doc?["posts"][index];
+            final doc = snapshots.data?.docs[0];
 
-          final time= Timestamp(post["time"].seconds,post["time"].nanoseconds).toDate();
+            final post = doc?["posts"][index];
 
-          return Column(
+            if(post["influencer"]==FirebaseAuth.instance.currentUser!.displayName)
+            {
+              return SizedBox();
+            }
 
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: size.width*0.03,vertical: size.height*0.01),
-                child: Column(
 
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+            final time = Timestamp(
+                post["time"].seconds, post["time"].nanoseconds).toDate();
 
-                    Row(
-                      children: [
-                        CircleAvatar(backgroundColor: Colors.grey.shade400,radius: size.width*0.03,),
-                        SizedBox(width: size.width*0.02,),
-                        Text(post["influencer"],style: TextStyle(fontWeight: FontWeight.bold,fontSize: size.width*0.035),),
-                        SizedBox(width: size.width*0.015,),
-                        Text((timeago.format(time)),style: TextStyle(color: Colors.grey.shade400),),
+            return Column(
 
-                        Spacer(),
-                        const Icon(Icons.more_vert),
-                      ],
-                    ),
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.03,
+                      vertical: size.height * 0.01),
+                  child: Column(
 
-                    SizedBox(height: size.height*0.01,),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-                    Text(post["title"],style: const TextStyle(fontWeight: FontWeight.w600),textAlign: TextAlign.start,),
+                      Row(
+                        children: [
+                          CircleAvatar(backgroundColor: Colors.grey.shade400,
+                            radius: size.width * 0.05,
+                            backgroundImage: AssetImage(
+                                post["influencerAvatar"]),),
+                          SizedBox(width: size.width * 0.02,),
+                          Text(post["influencer"], style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: size.width * 0.035),),
+                          SizedBox(width: size.width * 0.015,),
+                          Text((timeago.format(time)),
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: Colors.grey.shade400,
+                                fontSize: size.width * 0.035),),
 
-                    SizedBox(height: size.height*0.01,),
+                          Spacer(),
+                          const Icon(Icons.more_vert),
+                        ],
+                      ),
 
-                    post["image"]!=""? Container(
-                      color: Colors.green.shade200,
-                      height: size.height*0.25,
-                      child: Image.network(post["image"]),
-                    ) :
-                    Text(post["subtitle"],style: TextStyle(fontWeight: FontWeight.w300),maxLines: 3,overflow: TextOverflow.ellipsis,),
+                      SizedBox(height: size.height * 0.01,),
 
-                    SizedBox(height: size.height*0.02,),
+                      Text(post["title"], style: const TextStyle(
+                          fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.start,),
 
-                    Row(
-                      children: [
-                        const Icon(Icons.arrow_upward),
-                        SizedBox(width: size.width*0.03,),
-                        Text(post["up"].toString()),
+                      SizedBox(height: size.height * 0.01,),
 
-                        SizedBox(width: size.width*0.03,),
-                        const Icon(Icons.arrow_downward),
+                      post["image"] != "" ? Container(
+                        color: Colors.green.shade200,
+                        height: size.height * 0.25,
+                        child: Image.network(post["image"]),
+                      ) :
+                      Text(post["subtitle"], style: TextStyle(
+                          fontWeight: FontWeight.w300),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,),
 
-                        SizedBox(width: size.width*0.13,),
+                      SizedBox(height: size.height * 0.02,),
 
-                        const Icon(Icons.chat_bubble_outline),
+                      Row(
+                        children: [
+                          const Icon(Icons.arrow_upward),
+                          SizedBox(width: size.width * 0.03,),
+                          Text(post["up"].toString()),
 
-                        SizedBox(width: size.width*0.02,),
+                          SizedBox(width: size.width * 0.03,),
+                          const Icon(Icons.arrow_downward),
 
-                        Text(post["comments"].length.toString()),
+                          SizedBox(width: size.width * 0.13,),
 
-                        SizedBox(width: size.width*0.10,),
+                          const Icon(Icons.chat_bubble_outline),
 
-                        const Icon(CupertinoIcons.arrow_turn_up_right),
+                          SizedBox(width: size.width * 0.02,),
 
-                        SizedBox(width: size.width*0.02,),
+                          Text(post["comments"].length.toString()),
 
-                        const Text("Share"),
+                          SizedBox(width: size.width * 0.10,),
 
-                        SizedBox(width: size.width*0.02,),
+                          const Icon(CupertinoIcons.arrow_turn_up_right),
 
-                        Text(post["forwards"].toString()),
+                          SizedBox(width: size.width * 0.02,),
 
-                      ],
-                    ),
-                  ],
+                          const Text("Share"),
+
+                          SizedBox(width: size.width * 0.02,),
+
+                          Text(post["forwards"].toString()),
+
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const Divider(),
-            ],
-          );
-        });
+                const Divider(),
+              ],
+            );
+          });
+
       },
     );
   }
