@@ -30,6 +30,7 @@ class _HomeState extends State<Home> {
           );
         }
 
+        //If Not Posts Available
         if(snapshots.data!.docs.isEmpty){
           return Center(
             child: Column(
@@ -44,8 +45,24 @@ class _HomeState extends State<Home> {
           );
         }
 
-        //final doc = snapshots.data?.docs[2];
+        //If Only One Post that too of User.
+        else if(snapshots.data?.docs[0]["posts"].length==1 && snapshots.data?.docs[0]["posts"][0]["influencer"]==FirebaseAuth.instance.currentUser!.displayName)
+          {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("No Posts Yet"),
+                  ElevatedButton(onPressed: (){
+                    setState(() {});
+                  }, child: const Text("Refresh"),),
+                ],
+              ),
+            );
+          }
 
+
+        //Returning Posts
           return ListView.builder(
               itemCount: snapshots.data!.docs[0]["posts"].length, itemBuilder: (context, index) {
 
@@ -55,7 +72,7 @@ class _HomeState extends State<Home> {
 
             if(post["influencer"]==FirebaseAuth.instance.currentUser!.displayName)
             {
-              return SizedBox();
+              return const SizedBox();
             }
 
 
@@ -103,11 +120,12 @@ class _HomeState extends State<Home> {
                       SizedBox(height: size.height * 0.01,),
 
                       post["image"] != "" ? Container(
+                        color: greyButton,
                         height: size.height * 0.25,
                         width: size.width,
-                        child: Image.network(post["image"],fit: BoxFit.cover,),
+                        child: Image.network(post["image"],fit: BoxFit.contain,),
                       ) :
-                      Text(post["subtitle"], style: TextStyle(
+                      Text(post["subtitle"], style: const TextStyle(
                           fontWeight: FontWeight.w300),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,),

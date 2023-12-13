@@ -53,7 +53,7 @@ class Create extends StatelessWidget
             IconButton(icon: const Icon(Icons.attach_file),onPressed: (){},),
             IconButton(icon: const Icon(Icons.photo),onPressed: () async{
 
-              postController.img.value = await ImageService.uploadImage();
+              postController.img.value = await ImageService.uploadImage(context);
 
             },),
             IconButton(icon: const Icon(Icons.video_collection),onPressed: (){},),

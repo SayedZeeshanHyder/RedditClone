@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:path/path.dart';
 import 'package:reddit/auth/authname.dart';
 import 'package:reddit/colors.dart';
 import 'package:reddit/screens/avatarScreen.dart';
@@ -13,7 +14,7 @@ import 'authScreen.dart';
 class AuthServices
 {
 
-  static emailLogin(BuildContext context,String email,String password)
+  static emailSignUp(BuildContext context,String email,String password)
   {
 
 
@@ -130,6 +131,16 @@ class AuthServices
   async{
     await FirebaseAuth.instance.currentUser?.updatePhotoURL(avatar);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
+  }
+
+  static emailLogin(String email , String password,context)
+  {
+    FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value){
+
+      Navigator.pop(context);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
+
+    });
   }
 
 }

@@ -17,3 +17,5 @@ const drStrangeAvatar = "assets/images/drStrangeAvatar.jpg";
 const spidermanAvatar = "assets/images/spidermanAvatar.jpeg";
 
 const antmanAvatar = "assets/images/antmanAvatar.jpg";
+
+const googleIcon = "assets/images/googleIcon.png";

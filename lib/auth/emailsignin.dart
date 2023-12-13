@@ -74,7 +74,7 @@ class EmailSignIn extends StatelessWidget
               },
 
               controller: emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
 
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
@@ -146,7 +146,7 @@ class EmailSignIn extends StatelessWidget
           ()=> ElevatedButton(
             onPressed: buttonController.buttonEnabled.value?(){
 
-                  AuthServices.emailLogin(context, emailController.text.toString(), passwordController.text.toString());
+                  AuthServices.emailSignUp(context, emailController.text.toString(), passwordController.text.toString());
 
             }:null,
             child: const Text("Continue"),
