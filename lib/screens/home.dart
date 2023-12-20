@@ -46,23 +46,6 @@ class _HomeState extends State<Home> {
           );
         }
 
-        //If Only One Post that too of User.
-        else if(snapshots.data?.docs[0]["posts"].length==1 && snapshots.data?.docs[0]["posts"][0]["influencer"]==FirebaseAuth.instance.currentUser!.displayName)
-          {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("No Posts Yet"),
-                  ElevatedButton(onPressed: (){
-                    setState(() {});
-                  }, child: const Text("Refresh"),),
-                ],
-              ),
-            );
-          }
-
-
         //Returning Posts
           return ListView.builder(
               itemCount: snapshots.data!.docs[0]["posts"].length, itemBuilder: (context, index) {
@@ -71,18 +54,12 @@ class _HomeState extends State<Home> {
 
             final post = doc?["posts"][index];
 
-            if(post["influencer"]==FirebaseAuth.instance.currentUser!.displayName)
-            {
-              return const SizedBox();
-            }
-
-
             final time = Timestamp(
                 post["time"].seconds, post["time"].nanoseconds).toDate();
 
             return InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>PostScreen(index : index,post: post,)));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>PostScreen(index : index,),),);
               },
               child: Column(
 
@@ -118,9 +95,10 @@ class _HomeState extends State<Home> {
 
                         SizedBox(height: size.height * 0.01,),
 
-                        Text(post["title"], style: const TextStyle(
+                        Text(post["title"], style: TextStyle(
+                          fontSize: size.width*0.047,
                             fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.start,),
+                          textAlign: TextAlign.start,maxLines: 3,overflow: TextOverflow.ellipsis,),
 
                         SizedBox(height: size.height * 0.01,),
 

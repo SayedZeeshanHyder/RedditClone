@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:reddit/services/postController.dart';
 
 import '../images.dart';
 
 class AddComment extends StatelessWidget
 {
 
+  final commentController = TextEditingController();
+  final postController = Get.put(PostController());
+
   final index;
-  final post;
-  AddComment({required this.post,required this.index});
+  AddComment({required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +22,22 @@ class AddComment extends StatelessWidget
 
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        leading: IconButton(icon: const Icon(Icons.close),onPressed: (){},),
+        leading: IconButton(icon: const Icon(Icons.close),onPressed: (){
+
+          Navigator.pop(context);
+
+        },),
         title: const Text("Add comment"),
         actions: [
-          TextButton(onPressed: (){}, child: Text("Post",style: TextStyle(color: Colors.blue.shade700),),),
+          TextButton(onPressed: ()async{
+
+            if(commentController.text.isNotEmpty) {
+              await PostController.addComment(
+                  commentController.text, "", index);
+              Navigator.pop(context);
+            }
+
+          }, child: Text("Post",style: TextStyle(color: Colors.blue.shade700),),),
         ],
       ),
 
@@ -32,7 +48,7 @@ class AddComment extends StatelessWidget
           children: [
             Padding(
               padding: EdgeInsets.all(size.width*0.02),
-              child: Text(post["title"],style: TextStyle(fontWeight: FontWeight.w600,fontSize: size.width*0.05,overflow: TextOverflow.ellipsis),),
+              //child: Text(post["title"],style: TextStyle(fontWeight: FontWeight.w600,fontSize: size.width*0.05,overflow: TextOverflow.ellipsis),),
             ),
 
             Divider(),
@@ -40,8 +56,9 @@ class AddComment extends StatelessWidget
             Padding(
               padding: EdgeInsets.symmetric(horizontal: size.width*0.02,vertical: size.height*0.03),
               child: TextField(
+                controller: commentController,
                 maxLines: 25,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Add a Comment",
                   border: OutlineInputBorder(),
                 ),
@@ -54,7 +71,7 @@ class AddComment extends StatelessWidget
       floatingActionButton: Container(
         height: size.height*0.06,
         decoration: BoxDecoration(
-          color: Colors.blue.shade50,
+          color: Colors.white,
           border: Border(
             top: BorderSide(color: Colors.grey.shade400)
           ),
@@ -72,7 +89,14 @@ class AddComment extends StatelessWidget
 
             IconButton(onPressed: (){}, icon: const Icon(Icons.video_chat_outlined),),
 
-            IconButton(onPressed: (){}, icon: const Icon(Icons.photo),),
+            IconButton(onPressed: (){
+
+              if(commentController.text.isNotEmpty)
+                {
+
+                }
+
+            }, icon: const Icon(Icons.photo),),
 
           ],
         ),
