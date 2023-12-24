@@ -130,6 +130,9 @@ class AuthServices
   static updateAvatar(String avatar,context)
   async{
     await FirebaseAuth.instance.currentUser?.updatePhotoURL(avatar);
+
+    await addUser();
+
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
   }
 
@@ -140,6 +143,16 @@ class AuthServices
       Navigator.pop(context);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Nav()));
 
+    });
+  }
+  
+  
+  static addUser()
+  async{
+    final currentUser = await FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance.collection("UserInfo").doc(currentUser!.displayName).set({
+      "name":currentUser.displayName,
+      "avatar":currentUser.photoURL,
     });
   }
 

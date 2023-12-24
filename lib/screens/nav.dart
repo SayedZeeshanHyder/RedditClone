@@ -8,6 +8,7 @@ import 'package:reddit/controller/bottomNavController.dart';
 import 'package:reddit/screens/createscreen.dart';
 import 'package:reddit/screens/home.dart';
 import 'package:reddit/services/postController.dart';
+import 'chat/listofchats.dart';
 
 import '../colors.dart';
 
@@ -19,13 +20,13 @@ class Nav extends StatelessWidget
     Home(),
 
     //Communities
-    Center(child: Text("Communitites"),),
+    const Center(child: Text("Communitites"),),
 
     //Create
     Create(),
 
     //Chat
-    SizedBox(),
+    ChatScreen(),
 
     //Inbox
     SizedBox(),
@@ -86,7 +87,7 @@ class Nav extends StatelessWidget
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("Home",style: TextStyle(fontSize: size.width*0.05),),
+                      Obx(()=> appBarText(size)),
                       Icon(CupertinoIcons.chevron_down,size: size.width*0.05,),
                     ],
                   ),
@@ -415,6 +416,22 @@ class Nav extends StatelessWidget
         return alert;
       },
     );
+  }
+
+
+  Widget appBarText(size)
+  {
+    String header='';
+    switch(bottomNavController.currentIndex.value)
+    {
+      case 0:header="Home";break;
+      case 1:header="Communities";break;
+      case 3:header="Chat";break;
+      case 4:header="Inbox";break;
+    }
+
+    return Text(header,style: TextStyle(fontSize: size.width*0.05),);
+
   }
 
 }
