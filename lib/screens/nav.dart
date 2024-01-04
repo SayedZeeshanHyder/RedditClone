@@ -78,9 +78,8 @@ class Nav extends StatelessWidget {
                         width: size.width * 0.02,
                       ),
                       Container(
-                        width: size.width * 0.3,
+                        width: size.width * 0.4,
                         height: size.height * 0.05,
-                        padding: EdgeInsets.zero,
                         decoration: BoxDecoration(
                           color: greyButton,
                           borderRadius:
@@ -89,7 +88,9 @@ class Nav extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Obx(() => appBarText(size)),
+                            Obx(
+                              () => appBarText(size),
+                            ),
                             Icon(
                               CupertinoIcons.chevron_down,
                               size: size.width * 0.05,
@@ -517,6 +518,7 @@ class Nav extends StatelessWidget {
 
     return Text(
       header,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(fontSize: size.width * 0.05),
     );
   }
