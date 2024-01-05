@@ -13,77 +13,81 @@ class MyChatScreen extends StatelessWidget {
 
     return Scaffold(
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("Chats").snapshots(),
-        builder: (context, snapshots) {
-          if (snapshots.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshots.data!.docs.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("No Chats Available"),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ListOfUsers()));
-                    },
-                    child: const Text("Find People"),
-                  ),
-                ],
-              ),
-            );
-          }
+          stream: FirebaseFirestore.instance.collection("Chats").snapshots(),
+          builder: (context, snapshots) {
+            if (snapshots.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          return StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection("Chats").snapshots(),
-              builder: (context, snapshots) {
-                if (snapshots.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+            int c = 0;
+            for (final doc in snapshots.data!.docs) {
+              if (doc["roomId"].contains(auth.currentUser!.displayName)) {
+                c++;
+              }
+            }
+            if (c == 0) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("No Chats Available"),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ListOfUsers()));
+                      },
+                      child: const Text("Find People"),
+                    ),
+                  ],
+                ),
+              );
+            }
 
-                return ListView.builder(
-                    itemCount: snapshots.data?.docs.length,
-                    itemBuilder: (context, index) {
-                      String roomId = snapshots.data!.docs[index]["roomId"];
-                      if (roomId
-                          .contains(auth.currentUser!.displayName.toString())) {
-                        final info = snapshots.data!.docs[index];
-                        final chats = info["chats"][info["chats"].length - 1];
+            return ListView.builder(
+                itemCount: snapshots.data?.docs.length,
+                itemBuilder: (context, index) {
+                  String roomId = snapshots.data!.docs[index]["roomId"];
+                  if (roomId
+                      .contains(auth.currentUser!.displayName.toString())) {
+                    final info = snapshots.data!.docs[index];
+                    final chats = info["chats"][info["chats"].length - 1];
 
-                        return ListTile(
-                          onTap: () async {
-                            final passUserInfo = await passUser(
-                                getOppUser(info["user1"], info["user2"]));
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ChatScreen(user: passUserInfo)));
-                          },
-                          title: Text(
-                            getOppUser(info["user1"], info["user2"]),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(chats["message"]),
-                        );
-                      } else {
-                        return SizedBox();
-                      }
-                    });
-              });
+                    return ListTile(
+                      onTap: () async {
+                        final passUserInfo = await passUser(
+                            getOppUser(info["user1"], info["user2"]));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ChatScreen(user: passUserInfo)));
+                      },
+                      title: Text(
+                        getOppUser(info["user1"], info["user2"]),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(chats["message"]),
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                });
+          }),
+      floatingActionButton: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ListOfUsers()));
         },
+        child: const Text("Add Friend"),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 

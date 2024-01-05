@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'chatscreen.dart';
 
 class ListOfUsers extends StatelessWidget {
+  final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +34,13 @@ class ListOfUsers extends StatelessWidget {
                 return ListTile(
                   onTap: () {
                     Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChatScreen(
-                                  user: user,
-                                )));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                          user: user,
+                        ),
+                      ),
+                    );
                   },
                   title: Text(user["name"]),
                   leading: CircleAvatar(

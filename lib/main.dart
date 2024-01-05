@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:reddit/splash/splashScreen.dart';
 import 'package:reddit/themes.dart';
 
-void main() async{
-
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());

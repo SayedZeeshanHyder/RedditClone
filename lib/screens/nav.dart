@@ -7,6 +7,7 @@ import 'package:reddit/auth/authservices.dart';
 import 'package:reddit/controller/bottomNavController.dart';
 import 'package:reddit/screens/createscreen.dart';
 import 'package:reddit/screens/home.dart';
+import 'package:reddit/screens/settings.dart';
 import 'package:reddit/services/postController.dart';
 
 import '../colors.dart';
@@ -19,7 +20,7 @@ class Nav extends StatelessWidget {
 
     //Communities
     const Center(
-      child: Text("Communitites"),
+      child: Text("Communitites Section will be Added soon"),
     ),
 
     //Create
@@ -78,7 +79,7 @@ class Nav extends StatelessWidget {
                         width: size.width * 0.02,
                       ),
                       Container(
-                        width: size.width * 0.4,
+                        padding: EdgeInsets.all(size.width * 0.02),
                         height: size.height * 0.05,
                         decoration: BoxDecoration(
                           color: greyButton,
@@ -90,6 +91,9 @@ class Nav extends StatelessWidget {
                           children: [
                             Obx(
                               () => appBarText(size),
+                            ),
+                            SizedBox(
+                              width: size.width * 0.03,
                             ),
                             Icon(
                               CupertinoIcons.chevron_down,
@@ -337,9 +341,14 @@ class Nav extends StatelessWidget {
                     ),
                   ),
 
-                  const ListTile(
-                    leading: Icon(Icons.settings),
-                    title: Text("Settings"),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Settings()));
+                    },
+                    leading: const Icon(Icons.settings),
+                    title: const Text("Settings"),
                   ),
 
                   //Log Out Button
